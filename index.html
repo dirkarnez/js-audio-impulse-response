@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Summer Effect</title>
+</head>
+<body>
+    <h1>Audio Summer Effect</h1>
+    <button id="playButton">Play Summer Audio</button>
+
+    <script>
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const playButton = document.getElementById('playButton');
+
+        let audioBuffer;
+
+        // Load audio file
+        async function loadAudio(url) {
+            const response = await fetch(url);
+            const arrayBuffer = await response.arrayBuffer();
+            audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+        }
+
+        // Create summer effect
+        function createSummerEffect() {
+            const source = audioContext.createBufferSource();
+            source.buffer = audioBuffer;
+
+            // Create a low-pass filter
+            const lowPassFilter = audioContext.createBiquadFilter();
+            lowPassFilter.type = 'lowpass';
+            lowPassFilter.frequency.setValueAtTime(8000, audioContext.currentTime); // Softens the high frequencies
+
+            // Create a reverb effect
+            const convolver = audioContext.createConvolver();
+            const impulseResponse = audioContext.createBuffer(2, audioContext.sampleRate * 2, audioContext.sampleRate);
+            for (let i = 0; i < impulseResponse.length; i++) {
+                impulseResponse.getChannelData(0)[i] = Math.random() * 2 - 1; // Random noise
+                impulseResponse.getChannelData(1)[i] = Math.random() * 2 - 1; // Random noise
+            }
+            convolver.buffer = impulseResponse;
+
+            // Connect nodes
+            source.connect(lowPassFilter);
+            lowPassFilter.connect(convolver);
+            convolver.connect(audioContext.destination);
+
+            // Start playing
+            source.start();
+        }
+
+        // Load audio on page load
+        loadAudio('path_to_your_audio_file.mp3');
+
+        // Play button event listener
+        playButton.addEventListener('click', () => {
+            if (audioBuffer) {
+                createSummerEffect();
+            } else {
+                console.error('Audio not loaded yet.');
+            }
+        });
+    </script>
+</body>
+</html>
