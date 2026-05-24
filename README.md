@@ -21,3 +21,6 @@ someOtherAudioNode.connect(reverb);
 reverb.connect(audioCtx.destination);
 ```
 - [acoustic_sandbox/acoustic_sandbox.py at main · Burhanuddin98/acoustic_sandbox](https://github.com/burhanuddin98/acoustic_sandbox/blob/main/acoustic_sandbox.py)
+- IR
+  - Soldano SLO 100
+  - Vox AC30s
