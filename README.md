@@ -24,3 +24,4 @@ reverb.connect(audioCtx.destination);
 - IR
   - Soldano SLO 100
   - Vox AC30s
+  - [Essentials Capture Pack - ML Sound Lab](https://ml-sound-lab.com/pages/essentials-capture-pack)
